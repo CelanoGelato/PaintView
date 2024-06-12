@@ -1,4 +1,3 @@
-
 package com.celano.base.ardrawingsketchandpaint.demo.paint;
 
 import android.graphics.Color;

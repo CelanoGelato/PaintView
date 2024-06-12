@@ -1,16 +1,12 @@
-
 package com.celano.base.ardrawingsketchandpaint.demo.paint.painttools;
 
 import android.graphics.Paint;
 
+import androidx.annotation.NonNull;
+
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.ToolInterface;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.painttools.abtract.PenAbstract;
 
-
-/**
- * 铅笔
- * 
- * @author
- */
 public class PlainPen extends PenAbstract implements ToolInterface {
     public PlainPen(int size, int penColor) {
         this(size, penColor, Paint.Style.STROKE);
@@ -20,9 +16,9 @@ public class PlainPen extends PenAbstract implements ToolInterface {
         super(size, penColor, style);
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "\tplainPen: " + "\tshap: " + currentShape + "\thasDraw: " + hasDraw() + "\tsize: "
-                + penSize + "\tstyle:" + style;
+        return "\tplainPen: " + "\tshap: " + currentShape + "\thasDraw: " + hasDraw() + "\tsize: " + penSize + "\tstyle:" + style;
     }
 }

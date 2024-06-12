@@ -1,10 +1,10 @@
 package com.celano.base.ardrawingsketchandpaint.demo.paint;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.celano.base.ardrawingsketchandpaint.R;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.PaintViewCallBack;

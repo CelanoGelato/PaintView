@@ -1,4 +1,3 @@
-
 package com.celano.base.ardrawingsketchandpaint.demo.paint;
 
 import android.content.Context;
@@ -13,7 +12,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.PaintViewCallBack;
-import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.Shapable;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.ShapeAble;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.ShapesInterface;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.ToolInterface;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.UndoCommand;
@@ -136,15 +135,15 @@ public class PaintView extends View implements UndoCommand {
 
 
     private void setShape() {
-        if (mCurrentPainter instanceof Shapable) {
+        if (mCurrentPainter instanceof ShapeAble) {
             switch (mCurrentShapeType) {
                 case PaintConstants.SHAP.CURV:
-                    mCurrentShape = new Cur((Shapable) mCurrentPainter);
+                    mCurrentShape = new Cur((ShapeAble) mCurrentPainter);
                     break;
                 default:
                     break;
             }
-            ((Shapable) mCurrentPainter).setShap(mCurrentShape);
+            ((ShapeAble) mCurrentPainter).setShape(mCurrentShape);
         }
     }
 

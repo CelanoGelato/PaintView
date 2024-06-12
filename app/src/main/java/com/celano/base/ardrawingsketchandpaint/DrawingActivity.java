@@ -138,7 +138,7 @@ public class DrawingActivity extends AppCompatActivity implements View.OnClickLi
             draw.setColor(Color.WHITE);
             preview.setColor(Color.WHITE);
         } else if (view.getId() == R.id.image_draw_color) {
-            ColorPickerDialog.newBuilder().setDialogType(ColorPickerDialog.TYPE_CUSTOM).setAllowPresets(false).setDialogId(DIALOG_ID).setColor(currentColor).setShowAlphaSlider(true).show(this);
+            ColorPickerDialog.newBuilder().setDialogType(ColorPickerDialog.TYPE_PRESETS).setAllowPresets(false).setDialogId(DIALOG_ID).setColor(currentColor).setShowAlphaSlider(true).show(this);
         } else if (view.getId() == R.id.newBtn) {
 //            AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
 //            newDialog.setTitle("New Drawing");

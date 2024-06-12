@@ -4,10 +4,10 @@ import android.graphics.Path;
 
 import com.celano.base.ardrawingsketchandpaint.demo.paint.painttools.FirstCurrentPosition;
 
-public interface Shapable {
-	Path getPath();
+public interface ShapeAble {
+    Path getPath();
 
-	FirstCurrentPosition getFirstLastPoint();
+    FirstCurrentPosition getFirstLastPoint();
 
-	void setShap(ShapesInterface shape);
+    void setShape(ShapesInterface shape);
 }
