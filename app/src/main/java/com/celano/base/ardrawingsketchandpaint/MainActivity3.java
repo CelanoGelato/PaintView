@@ -1,4 +1,4 @@
-package com.celano.base.ardrawingsketchandpaint.demo.paint;
+package com.celano.base.ardrawingsketchandpaint;
 
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.celano.base.ardrawingsketchandpaint.R;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.PaintConstants;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.PaintView;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.PaintViewCallBack;
 
 public class MainActivity3 extends AppCompatActivity {
