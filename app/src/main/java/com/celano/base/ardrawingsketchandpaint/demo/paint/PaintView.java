@@ -86,7 +86,7 @@ public class PaintView extends View implements UndoCommand {
 
         mPaintType = PaintConstants.PEN_TYPE.PLAIN_PEN;
 
-        mCurrentShapeType = PaintConstants.SHAP.CURV;
+        mCurrentShapeType = PaintConstants.SHAPE.CUR;
         createNewPen();
     }
 
@@ -137,7 +137,7 @@ public class PaintView extends View implements UndoCommand {
     private void setShape() {
         if (mCurrentPainter instanceof ShapeAble) {
             switch (mCurrentShapeType) {
-                case PaintConstants.SHAP.CURV:
+                case PaintConstants.SHAPE.CUR:
                     mCurrentShape = new Cur((ShapeAble) mCurrentPainter);
                     break;
                 default:
@@ -272,17 +272,17 @@ public class PaintView extends View implements UndoCommand {
 
     public void setCurrentShapType(int type) {
         switch (type) {
-            case PaintConstants.SHAP.CURV:
-            case PaintConstants.SHAP.LINE:
-            case PaintConstants.SHAP.RECT:
-            case PaintConstants.SHAP.CIRCLE:
-            case PaintConstants.SHAP.OVAL:
-            case PaintConstants.SHAP.SQUARE:
-            case PaintConstants.SHAP.STAR:
+            case PaintConstants.SHAPE.CUR:
+            case PaintConstants.SHAPE.LINE:
+            case PaintConstants.SHAPE.RECT:
+            case PaintConstants.SHAPE.CIRCLE:
+            case PaintConstants.SHAPE.OVAL:
+            case PaintConstants.SHAPE.SQUARE:
+            case PaintConstants.SHAPE.STAR:
                 mCurrentShapeType = type;
                 break;
             default:
-                mCurrentShapeType = PaintConstants.SHAP.CURV;
+                mCurrentShapeType = PaintConstants.SHAPE.CUR;
                 break;
         }
     }

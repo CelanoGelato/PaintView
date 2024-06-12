@@ -33,9 +33,9 @@ public class PaintConstants {
         public static final int SIZE_5 = 30;
     }
 
-    public static final class SHAP {
+    public static final class SHAPE {
 
-        public static final int CURV = 1;
+        public static final int CUR = 1;
 
 
         public static final int LINE = 2;
@@ -58,7 +58,7 @@ public class PaintConstants {
 
     public static final class PATH {
         public static final String SAVE_PATH = Environment.getExternalStorageDirectory().getPath()
-                + "/paintPad";
+                + "/Drawing-sketch-and-paint";
     }
 
     public static final class PEN_TYPE {

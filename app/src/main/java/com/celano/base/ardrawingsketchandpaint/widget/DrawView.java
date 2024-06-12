@@ -23,14 +23,14 @@ public class DrawView extends View {
     private LinkedHashMap<MyPath, PaintOptions> mLastPaths = new LinkedHashMap<>();
     private LinkedHashMap<MyPath, PaintOptions> mUndonePaths = new LinkedHashMap<>();
 
-    private Paint mPaint = new Paint();
+    private Paint mBitmapPaint = new Paint();
     private MyPath mPath = new MyPath();
     private PaintOptions mPaintOptions = new PaintOptions();
 
-    private float mCurX = 0f;
-    private float mCurY = 0f;
-    private float mStartX = 0f;
-    private float mStartY = 0f;
+    private float currentX = 0f;
+    private float currentY = 0f;
+    private float firstX = 0f;
+    private float firstY = 0f;
     private boolean mIsSaving = false;
     private boolean mIsStrokeWidthBarEnabled = false;
     private Matrix mTransform = new Matrix();
@@ -48,26 +48,26 @@ public class DrawView extends View {
 
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mPaint.setColor(mPaintOptions.getColor());
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeJoin(Paint.Join.ROUND);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(mPaintOptions.getStrokeWidth());
-        mPaint.setAntiAlias(true);
+        mBitmapPaint.setColor(mPaintOptions.getColor());
+        mBitmapPaint.setStyle(Paint.Style.STROKE);
+        mBitmapPaint.setStrokeJoin(Paint.Join.ROUND);
+        mBitmapPaint.setStrokeCap(Paint.Cap.ROUND);
+        mBitmapPaint.setStrokeWidth(mPaintOptions.getStrokeWidth());
+        mBitmapPaint.setAntiAlias(true);
 
         mScaleGestureDetector = new ScaleGestureDetector(context,
-            new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-                @Override
-                public boolean onScale(ScaleGestureDetector detector) {
-                    float oldScale = mScale;
-                    mScale *= detector.getScaleFactor();
-                    mScale = Math.min(Math.max(mScale, 0.5f), 3.0f);
-                    mScrollX += detector.getFocusX() * (oldScale - mScale) / mScale;
-                    mScrollY += detector.getFocusY() * (oldScale - mScale) / mScale;
-                    invalidate();
-                    return true;
-                }
-            });
+                new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                    @Override
+                    public boolean onScale(ScaleGestureDetector detector) {
+                        float oldScale = mScale;
+                        mScale *= detector.getScaleFactor();
+                        mScale = Math.min(Math.max(mScale, 0.5f), 3.0f);
+                        mScrollX += detector.getFocusX() * (oldScale - mScale) / mScale;
+                        mScrollY += detector.getFocusY() * (oldScale - mScale) / mScale;
+                        invalidate();
+                        return true;
+                    }
+                });
     }
 
     public void reset() {
@@ -159,7 +159,7 @@ public class DrawView extends View {
         // Vẽ phần được vẽ lên
         for (MyPath key : mPaths.keySet()) {
             changePaint(mPaths.get(key));
-            canvas.drawPath(key, mPaint);
+            canvas.drawPath(key, mBitmapPaint);
         }
 
         return bitmap;
@@ -194,16 +194,16 @@ public class DrawView extends View {
 
         for (MyPath key : mPaths.keySet()) {
             changePaint(mPaths.get(key));
-            canvas.drawPath(key, mPaint);
+            canvas.drawPath(key, mBitmapPaint);
         }
 
         changePaint(mPaintOptions);
-        canvas.drawPath(mPath, mPaint);
+        canvas.drawPath(mPath, mBitmapPaint);
     }
 
     private void changePaint(PaintOptions paintOptions) {
-        mPaint.setColor(paintOptions.getColor());
-        mPaint.setStrokeWidth(paintOptions.getStrokeWidth());
+        mBitmapPaint.setColor(paintOptions.getColor());
+        mBitmapPaint.setStrokeWidth(paintOptions.getStrokeWidth());
     }
 
     public void clearCanvas() {
@@ -217,24 +217,24 @@ public class DrawView extends View {
     private void actionDown(float x, float y) {
         mPath.reset();
         mPath.moveTo(x, y);
-        mCurX = x;
-        mCurY = y;
+        currentX = x;
+        currentY = y;
     }
 
     private void actionMove(float x, float y) {
-        mPath.quadTo(mCurX, mCurY, (x + mCurX) / 2, (y + mCurY) / 2);
-        mCurX = x;
-        mCurY = y;
+        mPath.quadTo(currentX, currentY, (x + currentX) / 2, (y + currentY) / 2);
+        currentX = x;
+        currentY = y;
     }
 
     private void actionUp() {
-        mPath.lineTo(mCurX, mCurY);
+        mPath.lineTo(currentX, currentY);
 
         // draw a dot on click
-        if (mStartX == mCurX && mStartY == mCurY) {
-            mPath.lineTo(mCurX, mCurY + 2);
-            mPath.lineTo(mCurX + 1, mCurY + 2);
-            mPath.lineTo(mCurX + 1, mCurY);
+        if (firstX == currentX && firstY == currentY) {
+            mPath.lineTo(currentX, currentY + 2);
+            mPath.lineTo(currentX + 1, currentY + 2);
+            mPath.lineTo(currentX + 1, currentY);
         }
 
         mPaths.put(mPath, mPaintOptions);
@@ -307,8 +307,8 @@ public class DrawView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mStartX = x;
-                mStartY = y;
+                firstX = x;
+                firstY = y;
                 actionDown(x, y);
                 mUndonePaths.clear();
                 break;
