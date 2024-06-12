@@ -82,6 +82,8 @@ public class PaintConstants {
         public static final int BACKGROUND_COLOR = Color.TRANSPARENT;
     }
 
+    public static final int STACKED_SIZE = 50;
+
     public static final int UNDO_STACK_SIZE = 20;
 
     public static final int COLOR_VIEW_SIZE = 80;

@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -67,17 +66,6 @@ public class PaintView extends View implements UndoCommand {
 
     private boolean isTouchUp = false;
 
-    private int mStackedSize = 50;
-
-    //Scroll
-    private boolean mIsScrolling = false;
-    private float mScale = 1f;
-    private float mScrollingOriginX = 0f;
-    private float mScrollingOriginY = 0f;
-    private float mScrollX = 0f;
-    private float mScrollY = 0f;
-    private ScaleGestureDetector mScaleGestureDetector;
-
     public PaintView(Context context) {
         this(context, null);
     }
@@ -90,25 +78,12 @@ public class PaintView extends View implements UndoCommand {
     public PaintView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
-
-        mScaleGestureDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            @Override
-            public boolean onScale(@NonNull ScaleGestureDetector detector) {
-                float oldScale = mScale;
-                mScale *= detector.getScaleFactor();
-                mScale = Math.min(Math.max(mScale, 0.5f), 3.0f);
-                mScrollX += detector.getFocusX() * (oldScale - mScale) / mScale;
-                mScrollY += detector.getFocusY() * (oldScale - mScale) / mScale;
-                invalidate();
-                return true;
-            }
-        });
     }
 
     private void init() {
         mCanvas = new Canvas();
         mBitmapPaint = new Paint(Paint.DITHER_FLAG);
-        mUndoStack = new PaintPadUndoStack(this, mStackedSize);
+        mUndoStack = new PaintPadUndoStack(this, PaintConstants.STACKED_SIZE);
 
         mPaintType = PaintConstants.PEN_TYPE.PLAIN_PEN;
 
