@@ -29,6 +29,9 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class DrawingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener {
@@ -137,24 +140,24 @@ public class DrawingActivity extends AppCompatActivity implements View.OnClickLi
         } else if (view.getId() == R.id.image_draw_color) {
             ColorPickerDialog.newBuilder().setDialogType(ColorPickerDialog.TYPE_CUSTOM).setAllowPresets(false).setDialogId(DIALOG_ID).setColor(currentColor).setShowAlphaSlider(true).show(this);
         } else if (view.getId() == R.id.newBtn) {
-            AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
-            newDialog.setTitle("New Drawing");
-            newDialog.setMessage("Start a new drawing? (This will erase your current drawing.)");
-            newDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    draw.reset();
-                    dialog.dismiss();
-                }
-            });
-            newDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            newDialog.show();
+//            AlertDialog.Builder newDialog = new AlertDialog.Builder(this);
+//            newDialog.setTitle("New Drawing");
+//            newDialog.setMessage("Start a new drawing? (This will erase your current drawing.)");
+//            newDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    draw.reset();
+//                    dialog.dismiss();
+//                }
+//            });
+//            newDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.cancel();
+//                }
+//            });
+//
+//            newDialog.show();
         } else if (view.getId() == R.id.saveBtn) {
             AlertDialog.Builder saveDialog = new AlertDialog.Builder(this);
             saveDialog.setTitle("Save Drawing");
@@ -219,16 +222,23 @@ public class DrawingActivity extends AppCompatActivity implements View.OnClickLi
     public void saveDrawing() {
         fixMediaDir();
 
-        if (checkPermissionREAD_EXTERNAL_STORAGE(getApplicationContext())) {
-            Bitmap bmp = draw.getDrawBitmap();
-            String imgSaved = MediaStore.Images.Media.insertImage(getContentResolver(), bmp, UUID.randomUUID().toString() + ".png", "drawing");
-            if (imgSaved != null) {
-                Toast savedtoast = Toast.makeText(getApplicationContext().getApplicationContext(), "Drawing saved to Gallery", Toast.LENGTH_SHORT);
-                savedtoast.show();
-            } else {
-                Toast unsaved = Toast.makeText(getApplicationContext().getApplicationContext(), "Image could not saved", Toast.LENGTH_SHORT);
-                unsaved.show();
-            }
+//        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+//            Bitmap bmp = draw.getPaintBackground();
+//            String imgSaved = MediaStore.Images.Media.insertImage(getContentResolver(), bmp, UUID.randomUUID().toString() + ".png", "drawing");
+//            if (imgSaved != null) {
+//                Toast savedtoast = Toast.makeText(getApplicationContext().getApplicationContext(), "Drawing saved to Gallery", Toast.LENGTH_SHORT);
+//                savedtoast.show();
+//            } else {
+//                Toast unsaved = Toast.makeText(getApplicationContext().getApplicationContext(), "Image could not saved", Toast.LENGTH_SHORT);
+//                unsaved.show();
+//            }
+//        }
+
+        String sdPicturesPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
+        String filename = sdPicturesPath + "/DrawImage_" + timeStamp;
+        if (FileUtils.saveBitmap(filename, draw.getPaintBackground(), Bitmap.CompressFormat.PNG, 100)) {
+            Toast.makeText(this, "Save Success", Toast.LENGTH_SHORT).show();
         }
     }
 
