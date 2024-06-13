@@ -135,7 +135,8 @@ public class DrawingActivity extends AppCompatActivity implements View.OnClickLi
             draw.setColor(currentColor);
             preview.setColor(currentColor);
         } else if (view.getId() == R.id.image_draw_eraser) {
-            draw.eraserPaint();
+            draw.setColor(Color.WHITE);
+            preview.setColor(Color.WHITE);
         } else if (view.getId() == R.id.image_draw_color) {
             ColorPickerDialog.newBuilder().setDialogType(ColorPickerDialog.TYPE_PRESETS).setAllowPresets(false).setDialogId(DIALOG_ID).setColor(currentColor).setShowAlphaSlider(true).show(this);
         } else if (view.getId() == R.id.newBtn) {
