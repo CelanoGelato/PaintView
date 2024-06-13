@@ -75,7 +75,7 @@ public abstract class PenAbstract implements ToolInterface, ShapeAble {
     @Override
     public void touchMove(float x, float y) {
         if (isMoved(x, y)) {
-            drawBeziercurve(x, y);
+            drawBezierCurve(x, y);
             savePoint(x, y);
 
             mHasDraw = true;
@@ -104,7 +104,7 @@ public abstract class PenAbstract implements ToolInterface, ShapeAble {
         return dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE;
     }
 
-    private void drawBeziercurve(float x, float y) {
+    private void drawBezierCurve(float x, float y) {
         mPath.quadTo(mCurrentX, mCurrentY, (x + mCurrentX) / 2,
                 (y + mCurrentY) / 2);
     }

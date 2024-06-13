@@ -19,12 +19,12 @@ import androidx.core.graphics.ColorUtils;
 import java.util.LinkedHashMap;
 
 public class DrawView extends View {
-    private LinkedHashMap<MyPath, PaintOptions> mPaths = new LinkedHashMap<>();
-    private LinkedHashMap<MyPath, PaintOptions> mLastPaths = new LinkedHashMap<>();
-    private LinkedHashMap<MyPath, PaintOptions> mUndonePaths = new LinkedHashMap<>();
+    private LinkedHashMap<DrawPath, PaintOptions> mPaths = new LinkedHashMap<>();
+    private LinkedHashMap<DrawPath, PaintOptions> mLastPaths = new LinkedHashMap<>();
+    private LinkedHashMap<DrawPath, PaintOptions> mUndonePaths = new LinkedHashMap<>();
 
     private Paint mBitmapPaint = new Paint();
-    private MyPath mPath = new MyPath();
+    private DrawPath mPath = new DrawPath();
     private PaintOptions mPaintOptions = new PaintOptions();
 
     private float currentX = 0f;
@@ -79,7 +79,7 @@ public class DrawView extends View {
 
     public void undo() {
         if (mPaths.isEmpty() && !mLastPaths.isEmpty()) {
-            mPaths = (LinkedHashMap<MyPath, PaintOptions>) mLastPaths.clone();
+            mPaths = (LinkedHashMap<DrawPath, PaintOptions>) mLastPaths.clone();
             mLastPaths.clear();
             invalidate();
             return;
@@ -88,7 +88,7 @@ public class DrawView extends View {
             return;
         }
         PaintOptions lastPath = mPaths.values().stream().reduce((first, second) -> second).orElse(null);
-        MyPath lastKey = mPaths.keySet().stream().reduce((first, second) -> second).orElse(null);
+        DrawPath lastKey = mPaths.keySet().stream().reduce((first, second) -> second).orElse(null);
 
         if (lastKey != null && lastPath != null) {
             mPaths.remove(lastKey);
@@ -102,7 +102,7 @@ public class DrawView extends View {
             return;
         }
 
-        MyPath lastKey = mUndonePaths.keySet().stream().reduce((first, second) -> second).orElse(null);
+        DrawPath lastKey = mUndonePaths.keySet().stream().reduce((first, second) -> second).orElse(null);
         if (lastKey != null) {
             addPath(lastKey, mUndonePaths.get(lastKey));
             mUndonePaths.remove(lastKey);
@@ -151,22 +151,7 @@ public class DrawView extends View {
         return bitmap;
     }
 
-    public Bitmap getDrawBitmap() {
-        Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(Color.WHITE); // Xóa màu nền
-
-        // Vẽ phần được vẽ lên
-        for (MyPath key : mPaths.keySet()) {
-            changePaint(mPaths.get(key));
-            canvas.drawPath(key, mBitmapPaint);
-        }
-
-        return bitmap;
-    }
-
-
-    public void addPath(MyPath path, PaintOptions options) {
+    public void addPath(DrawPath path, PaintOptions options) {
         mPaths.put(path, options);
     }
 
@@ -192,7 +177,7 @@ public class DrawView extends View {
         canvas.setMatrix(mTransform);
         mTransform.invert(mTransform);
 
-        for (MyPath key : mPaths.keySet()) {
+        for (DrawPath key : mPaths.keySet()) {
             changePaint(mPaths.get(key));
             canvas.drawPath(key, mBitmapPaint);
         }
@@ -208,7 +193,7 @@ public class DrawView extends View {
 
     public void clearCanvas() {
         mBackground = null;
-        mLastPaths = (LinkedHashMap<MyPath, PaintOptions>) mPaths.clone();
+        mLastPaths = (LinkedHashMap<DrawPath, PaintOptions>) mPaths.clone();
         mPath.reset();
         mPaths.clear();
         invalidate();
@@ -238,7 +223,7 @@ public class DrawView extends View {
         }
 
         mPaths.put(mPath, mPaintOptions);
-        mPath = new MyPath();
+        mPath = new DrawPath();
         mPaintOptions = new PaintOptions(mPaintOptions.getColor(), mPaintOptions.getStrokeWidth(), mPaintOptions.getAlpha());
     }
 

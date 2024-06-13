@@ -182,7 +182,7 @@ public class PaintView extends View implements UndoCommand {
         if (!canvasIsCreated) {
             mBitmapWidth = w;
             mBitmapHeight = h;
-            creatCanvasBitmap(w, h);
+            createCanvasBitmap(w, h);
             canvasIsCreated = true;
         }
     }
@@ -237,20 +237,20 @@ public class PaintView extends View implements UndoCommand {
         if (clearBackground) {
             recycleMBitmap();
             recycleOrgBitmap();
-            creatCanvasBitmap(mBitmapWidth, mBitmapHeight);
+            createCanvasBitmap(mBitmapWidth, mBitmapHeight);
         } else {
             if (mOrgBitMap != null) {
                 mBitmap = BitMapUtils.duplicateBitmap(mOrgBitMap);
                 mCanvas.setBitmap(mBitmap);
             } else {
-                creatCanvasBitmap(mBitmapWidth, mBitmapHeight);
+                createCanvasBitmap(mBitmapWidth, mBitmapHeight);
             }
         }
         mUndoStack.clearAll();
         invalidate();
     }
 
-    private void creatCanvasBitmap(int w, int h) {
+    private void createCanvasBitmap(int w, int h) {
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         mCanvas.setBitmap(mBitmap);
     }
@@ -270,7 +270,7 @@ public class PaintView extends View implements UndoCommand {
         }
     }
 
-    public void setCurrentShapType(int type) {
+    public void setCurrentShapeType(int type) {
         switch (type) {
             case PaintConstants.SHAPE.CUR:
             case PaintConstants.SHAPE.LINE:
@@ -428,7 +428,7 @@ public class PaintView extends View implements UndoCommand {
 
                     mPaintView.setTempForeBitmap(mPaintView.mOrgBitMap);
                 } else {
-                    mPaintView.creatCanvasBitmap(mPaintView.mBitmapWidth, mPaintView.mBitmapHeight);
+                    mPaintView.createCanvasBitmap(mPaintView.mBitmapWidth, mPaintView.mBitmapHeight);
                 }
 
                 Canvas canvas = mPaintView.mCanvas;
@@ -455,7 +455,7 @@ public class PaintView extends View implements UndoCommand {
                 if (null != mOrgBitMap) {
                     mPaintView.setTempForeBitmap(mPaintView.mOrgBitMap);
                 } else {
-                    mPaintView.creatCanvasBitmap(mPaintView.mBitmapWidth, mPaintView.mBitmapHeight);
+                    mPaintView.createCanvasBitmap(mPaintView.mBitmapWidth, mPaintView.mBitmapHeight);
                 }
 
                 Canvas canvas = mPaintView.mCanvas;

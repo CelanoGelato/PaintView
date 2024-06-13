@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class MyPath extends Path implements Serializable {
+public class DrawPath extends Path implements Serializable {
     private final LinkedList<Action> actions = new LinkedList<>();
 
     private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
