@@ -3,10 +3,12 @@ package com.celano.base.ardrawingsketchandpaint.demo.paint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -65,6 +67,15 @@ public class PaintView extends View implements UndoCommand {
 
     private boolean isTouchUp = false;
 
+    private float mScale = 1.0f;
+    private float mScrollX = 0;
+    private float mScrollY = 0;
+    private boolean mIsScrolling = false;
+    private float mScrollOriginX, mScrollOriginY;
+    private Matrix mTransform = new Matrix();
+    private ScaleGestureDetector mScaleGestureDetector;
+
+
     public PaintView(Context context) {
         this(context, null);
     }
@@ -88,6 +99,19 @@ public class PaintView extends View implements UndoCommand {
 
         mCurrentShapeType = PaintConstants.SHAPE.CUR;
         createNewPen();
+
+        mScaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            @Override
+            public boolean onScale(ScaleGestureDetector detector) {
+                float oldScale = mScale;
+                mScale *= detector.getScaleFactor();
+                mScale = Math.max(0.5f, Math.min(mScale, 3.0f));  // Giới hạn scale từ 0.5 đến 3.0
+                mScrollX += detector.getFocusX() * (oldScale - mScale) / mScale;
+                mScrollY += detector.getFocusY() * (oldScale - mScale) / mScale;
+                invalidate();
+                return true;
+            }
+        });
     }
 
     public void setCallBack(PaintViewCallBack callBack) {
@@ -96,8 +120,16 @@ public class PaintView extends View implements UndoCommand {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        mScaleGestureDetector.onTouchEvent(event);
+
+        // Xử lý các sự kiện chạm cho zoom và di chuyển
+        if (handleScroll(event)) return true;
+
+        float[] transformedPoints = applyInverseTransform(event.getX(), event.getY());
+        float x = transformedPoints[0];
+        float y = transformedPoints[1];
+
+
         isTouchUp = false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -133,6 +165,54 @@ public class PaintView extends View implements UndoCommand {
         return true;
     }
 
+    private float[] applyInverseTransform(float x, float y) {
+        float[] points = new float[]{x, y};
+        Matrix inverse = new Matrix();
+        mTransform.invert(inverse);
+        inverse.mapPoints(points);
+        return points;
+    }
+
+    private boolean handleScroll(MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_DOWN && event.getAction() != MotionEvent.ACTION_POINTER_DOWN && event.getAction() != MotionEvent.ACTION_POINTER_UP && event.getAction() != MotionEvent.ACTION_MOVE)
+            return false;
+
+        boolean shouldScroll = event.getPointerCount() > 1;
+        MotionEvent.PointerCoords center = getPointerCenter(event);
+
+        if (shouldScroll != mIsScrolling) {
+            if (shouldScroll) {
+                mIsScrolling = true;
+                mScrollOriginX = center.x;
+                mScrollOriginY = center.y;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                mIsScrolling = false;
+            }
+            return true;
+        }
+
+        if (shouldScroll) {
+            mScrollX += (center.x - mScrollOriginX) / mScale;
+            mScrollY += (center.y - mScrollOriginY) / mScale;
+            mScrollOriginX = center.x;
+            mScrollOriginY = center.y;
+            invalidate();
+        }
+        return mIsScrolling;
+    }
+
+    private MotionEvent.PointerCoords getPointerCenter(MotionEvent event) {
+        MotionEvent.PointerCoords result = new MotionEvent.PointerCoords();
+        MotionEvent.PointerCoords temp = new MotionEvent.PointerCoords();
+        for (int i = 0; i < event.getPointerCount(); i++) {
+            event.getPointerCoords(i, temp);
+            result.x += temp.x;
+            result.y += temp.y;
+        }
+        result.x /= event.getPointerCount();
+        result.y /= event.getPointerCount();
+        return result;
+    }
 
     private void setShape() {
         if (mCurrentPainter instanceof ShapeAble) {
@@ -148,17 +228,35 @@ public class PaintView extends View implements UndoCommand {
     }
 
     @Override
-    public void onDraw(Canvas cv) {
+    protected void onDraw(Canvas cv) {
+        super.onDraw(cv);
+
+        // Lưu trạng thái hiện tại của canvas
+        cv.save();
+
+        // Thiết lập ma trận biến đổi cho zoom và di chuyển
+        mTransform.setTranslate(mScrollX + getWidth() / 2f, mScrollY + getHeight() / 2f);
+        mTransform.postScale(mScale, mScale);
+        mTransform.postTranslate(-getWidth() / 2f, -getHeight() / 2f);
+        cv.concat(mTransform);
+
+        // Vẽ màu nền
         cv.drawColor(mBackGroundColor);
 
+        // Vẽ bitmap lên canvas
         cv.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 
+        // Vẽ các thành phần khác nếu cần
         if (!isTouchUp) {
             if (mPaintType != PaintConstants.PEN_TYPE.ERASER) {
                 mCurrentPainter.draw(cv);
             }
         }
+
+        // Khôi phục trạng thái canvas
+        cv.restore();
     }
+
 
     void createNewPen() {
         ToolInterface tool = null;
