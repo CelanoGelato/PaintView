@@ -103,13 +103,13 @@ public class PaintView extends View implements UndoCommand {
             case MotionEvent.ACTION_DOWN:
                 mCanvas.setBitmap(mBitmap);
                 createNewPen();
-                mCurrentPainter.touchDown(x, y);
+                mCurrentPainter.actionDown(x, y);
                 mUndoStack.clearRedo();
                 mCallBack.onTouchDown();
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                mCurrentPainter.touchMove(x, y);
+                mCurrentPainter.actionMove(x, y);
                 if (mPaintType == PaintConstants.PEN_TYPE.ERASER) {
                     mCurrentPainter.draw(mCanvas);
                 }
@@ -123,7 +123,7 @@ public class PaintView extends View implements UndoCommand {
                         mCallBack.onHasDraw();
                     }
                 }
-                mCurrentPainter.touchUp(x, y);
+                mCurrentPainter.actionUp(x, y);
 
                 mCurrentPainter.draw(mCanvas);
                 invalidate();

@@ -74,7 +74,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void onClickButtonRedo() {
-//        mPaintView.redo();
+        mPaintView.redo();
         upDateUndoRedo();
     }
 
@@ -82,21 +82,21 @@ public class MainActivity3 extends AppCompatActivity {
      * undo
      */
     private void onClickButtonUndo() {
-//        mPaintView.undo();
-//        upDateUndoRedo();
+        mPaintView.undo();
+        upDateUndoRedo();
     }
 
     private void upDateUndoRedo() {
-//        if (mPaintView.canUndo()) {
-//            enableUndoButton();
-//        } else {
-//            disableUndoButton();
-//        }
-//        if (mPaintView.canRedo()) {
-//            enableRedoButton();
-//        } else {
-//            disableRedoButton();
-//        }
+        if (mPaintView.canUndo()) {
+            enableUndoButton();
+        } else {
+            disableUndoButton();
+        }
+        if (mPaintView.canRedo()) {
+            enableRedoButton();
+        } else {
+            disableRedoButton();
+        }
     }
 
     private void initCallBack() {

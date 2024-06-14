@@ -48,7 +48,7 @@ public class Eraser implements ToolInterface {
     }
 
     @Override
-    public void touchDown(float x, float y) {
+    public void actionDown(float x, float y) {
         mPath.reset();
         mPath.moveTo(x, y);
         mCurrentX = x;
@@ -56,7 +56,7 @@ public class Eraser implements ToolInterface {
     }
 
     @Override
-    public void touchMove(float x, float y) {
+    public void actionMove(float x, float y) {
         if (isMoved(x, y)) {
             drawBezierCurve(x, y);
             mCurrentX = x;
@@ -67,7 +67,7 @@ public class Eraser implements ToolInterface {
     }
 
     @Override
-    public void touchUp(float x, float y) {
+    public void actionUp(float x, float y) {
         mPath.lineTo(x, y);
     }
 
