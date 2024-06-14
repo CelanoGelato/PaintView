@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -72,11 +73,12 @@ public class PaintView extends View implements UndoCommand {
     private float mScrollY = 0;
     private boolean mIsScrolling = false;
     private float mScrollOriginX, mScrollOriginY;
-    private Matrix mTransform = new Matrix();
+    private final Matrix mTransform = new Matrix();
     private ScaleGestureDetector mScaleGestureDetector;
 
     private Bitmap mBackgroundImage = null; // Ảnh nền
-    private Matrix mBackgroundMatrix = new Matrix(); // Ma trận để biến đổi ảnh nền
+    private final Matrix mBackgroundMatrix = new Matrix(); // Ma trận để biến đổi ảnh nền
+    private RectF mDrawingRect; // Ma trận để biến đổi ảnh nền
 
     public PaintView(Context context) {
         this(context, null);
@@ -119,7 +121,6 @@ public class PaintView extends View implements UndoCommand {
     public void setBackgroundImage(Bitmap backgroundImage) {
         mBackgroundImage = backgroundImage;
 
-        // Tính toán ma trận để điều chỉnh ảnh nền
         if (mBackgroundImage != null) {
             int viewWidth = getWidth();
             int viewHeight = getHeight();
@@ -133,6 +134,14 @@ public class PaintView extends View implements UndoCommand {
 
             mBackgroundMatrix.setScale(scale, scale);
             mBackgroundMatrix.postTranslate(dx, dy);
+
+            // Tạo Rect xác định vùng vẽ
+            float left = dx;
+            float top = dy;
+            float right = left + imageWidth * scale;
+            float bottom = top + imageHeight * scale;
+
+            mDrawingRect = new RectF(left, top, right, bottom);
         }
 
         invalidate();
@@ -153,6 +162,9 @@ public class PaintView extends View implements UndoCommand {
         float x = transformedPoints[0];
         float y = transformedPoints[1];
 
+        if (!mDrawingRect.contains(x, y)) {
+            return true;
+        }
 
         isTouchUp = false;
         switch (event.getAction()) {
@@ -267,8 +279,17 @@ public class PaintView extends View implements UndoCommand {
         // Vẽ màu nền
         cv.drawColor(mBackGroundColor);
 
+        // Vẽ ảnh nền đã điều chỉnh vị trí và tỉ lệ
         if (mBackgroundImage != null) {
             cv.drawBitmap(mBackgroundImage, mBackgroundMatrix, mBitmapPaint);
+        }
+
+        // Chỉ vẽ trong vùng vẽ hợp lệ
+        if (mBitmap != null && mDrawingRect != null) {
+            cv.save();
+            cv.clipRect(mDrawingRect);
+            cv.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+            cv.restore();
         }
 
         // Vẽ bitmap lên canvas
@@ -284,7 +305,6 @@ public class PaintView extends View implements UndoCommand {
         // Khôi phục trạng thái canvas
         cv.restore();
     }
-
 
     void createNewPen() {
         ToolInterface tool = null;
@@ -316,22 +336,6 @@ public class PaintView extends View implements UndoCommand {
             canvasIsCreated = true;
         }
     }
-
-
-    public void setForeBitMap(Bitmap bitmap) {
-        if (bitmap != null) {
-            recycleMBitmap();
-            recycleOrgBitmap();
-        }
-        mBitmap = BitMapUtils.duplicateBitmap(bitmap, getWidth(), getHeight());
-        mOrgBitMap = BitMapUtils.duplicateBitmap(mBitmap);
-        if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
-            bitmap = null;
-        }
-        invalidate();
-    }
-
 
     private void recycleOrgBitmap() {
         if (mOrgBitMap != null && !mOrgBitMap.isRecycled()) {
