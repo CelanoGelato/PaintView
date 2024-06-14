@@ -75,6 +75,8 @@ public class PaintView extends View implements UndoCommand {
     private Matrix mTransform = new Matrix();
     private ScaleGestureDetector mScaleGestureDetector;
 
+    private Bitmap mBackgroundImage = null; // Ảnh nền
+    private Matrix mBackgroundMatrix = new Matrix(); // Ma trận để biến đổi ảnh nền
 
     public PaintView(Context context) {
         this(context, null);
@@ -105,13 +107,35 @@ public class PaintView extends View implements UndoCommand {
             public boolean onScale(ScaleGestureDetector detector) {
                 float oldScale = mScale;
                 mScale *= detector.getScaleFactor();
-                mScale = Math.max(0.5f, Math.min(mScale, 3.0f));  // Giới hạn scale từ 0.5 đến 3.0
+                mScale = Math.max(1f, Math.min(mScale, 3.0f));  // Giới hạn scale từ 0.5 đến 3.0
                 mScrollX += detector.getFocusX() * (oldScale - mScale) / mScale;
                 mScrollY += detector.getFocusY() * (oldScale - mScale) / mScale;
                 invalidate();
                 return true;
             }
         });
+    }
+
+    public void setBackgroundImage(Bitmap backgroundImage) {
+        mBackgroundImage = backgroundImage;
+
+        // Tính toán ma trận để điều chỉnh ảnh nền
+        if (mBackgroundImage != null) {
+            int viewWidth = getWidth();
+            int viewHeight = getHeight();
+            int imageWidth = mBackgroundImage.getWidth();
+            int imageHeight = mBackgroundImage.getHeight();
+
+            float scale = Math.min((float) viewWidth / imageWidth, (float) viewHeight / imageHeight);
+
+            float dx = (viewWidth - imageWidth * scale) / 2;
+            float dy = (viewHeight - imageHeight * scale) / 2;
+
+            mBackgroundMatrix.setScale(scale, scale);
+            mBackgroundMatrix.postTranslate(dx, dy);
+        }
+
+        invalidate();
     }
 
     public void setCallBack(PaintViewCallBack callBack) {
@@ -243,6 +267,10 @@ public class PaintView extends View implements UndoCommand {
         // Vẽ màu nền
         cv.drawColor(mBackGroundColor);
 
+        if (mBackgroundImage != null) {
+            cv.drawBitmap(mBackgroundImage, mBackgroundMatrix, mBitmapPaint);
+        }
+
         // Vẽ bitmap lên canvas
         cv.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 
@@ -277,6 +305,10 @@ public class PaintView extends View implements UndoCommand {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        if (mBackgroundImage != null) {
+            setBackgroundImage(mBackgroundImage);
+        }
+
         if (!canvasIsCreated) {
             mBitmapWidth = w;
             mBitmapHeight = h;

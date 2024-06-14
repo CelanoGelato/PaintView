@@ -1,5 +1,7 @@
 package com.celano.base.ardrawingsketchandpaint;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,9 @@ public class MainActivity3 extends AppCompatActivity {
         btnUndo = (Button) findViewById(R.id.btnUndo);
         btnRedo = (Button) findViewById(R.id.btnRedo);
         btnClear = (Button) findViewById(R.id.btnClear);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.raw.image);
+        mPaintView.setBackgroundImage(bitmap);
 
         btnPencil.setOnClickListener(new View.OnClickListener() {
             @Override
