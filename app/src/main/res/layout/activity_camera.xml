@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/camera_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.otaliastudios.cameraview.CameraView
+                android:id="@+id/camera_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:keepScreenOn="true"
+                app:cameraAudio="on"
+                app:cameraEngine="camera2"
+                app:cameraExperimental="true"
+                app:cameraFacing="back"
+                app:cameraFlash="auto"
+                app:cameraGestureLongTap="none"
+                app:cameraGesturePinch="zoom"
+                app:cameraGestureScrollHorizontal="filterControl1"
+                app:cameraGestureScrollVertical="exposureCorrection"
+                app:cameraGestureTap="autoFocus"
+                app:cameraGrid="off"
+                app:cameraMode="picture"
+                app:cameraPictureSizeMaxWidth="2000"
+                app:cameraPlaySounds="true"
+                app:cameraPreview="glSurface"
+                app:cameraSnapshotMaxWidth="1280"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:id="@+id/captureFlash"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0"
+                    android:background="@color/color_white" />
+            </com.otaliastudios.cameraview.CameraView>
+
+            <com.ortiz.touchview.TouchImageView
+                android:id="@+id/objImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="50dp"
+                android:alpha="50"
+                android:scaleType="matrix"
+                android:src="@drawable/app_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_layer"
+            android:layout_width="900px"
+            android:layout_height="160px"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/opacity_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/opacity_zero"
+                android:layout_width="61px"
+                android:layout_height="108px"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/opacity_0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/opacity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50%"
+                android:textColor="#ff3e4e3e"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/alpha_seek"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/alpha_seek"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:max="10"
+                android:maxHeight="4dp"
+                android:progress="5"
+                android:progressDrawable="@drawable/progressdrawable"
+                android:thumb="@drawable/effect_opacity_thumb"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/opacity_hundred"
+                app:layout_constraintStart_toEndOf="@+id/opacity_zero"
+                app:layout_constraintTop_toBottomOf="@+id/opacity_text" />
+
+            <ImageView
+                android:id="@+id/opacity_hundred"
+                android:layout_width="98px"
+                android:layout_height="108px"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/opacity_100"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_convert_bitmap"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/image" />
+</RelativeLayout>
