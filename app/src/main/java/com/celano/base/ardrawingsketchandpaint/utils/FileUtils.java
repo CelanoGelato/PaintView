@@ -1,4 +1,4 @@
-package com.celano.base.ardrawingsketchandpaint;
+package com.celano.base.ardrawingsketchandpaint.utils;
 
 import android.graphics.Bitmap;
 

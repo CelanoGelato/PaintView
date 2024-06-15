@@ -14,7 +14,7 @@ import com.celano.base.ardrawingsketchandpaint.demo.paint.PaintView;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.PaintViewCallBack;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView;
 
-public class MainActivity3 extends AppCompatActivity {
+public class PaintActivity extends AppCompatActivity {
 
 
     private PaintView mPaintView;
@@ -29,7 +29,7 @@ public class MainActivity3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.activity_paint);
 
         mPaintView = (PaintView) findViewById(R.id.paintView);
 
@@ -147,14 +147,12 @@ public class MainActivity3 extends AppCompatActivity {
 
     private void initCallBack() {
         mPaintView.setCallBack(new PaintViewCallBack() {
-            // 当画了之后对Button进行更新
             @Override
             public void onHasDraw() {
                 enableUndoButton();
                 disableRedoButton();
             }
 
-            // 当点击之后让各个弹出的窗口都消失
             @Override
             public void onTouchDown() {
             }

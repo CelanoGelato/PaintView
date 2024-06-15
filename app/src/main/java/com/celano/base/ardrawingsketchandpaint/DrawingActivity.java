@@ -23,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView;
+import com.celano.base.ardrawingsketchandpaint.utils.FileUtils;
 import com.celano.base.ardrawingsketchandpaint.widget.DrawView;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
