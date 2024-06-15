@@ -1,4 +1,4 @@
-package com.celano.base.ardrawingsketchandpaint.widget;
+package com.celano.base.ardrawingsketchandpaint.demo.paint.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

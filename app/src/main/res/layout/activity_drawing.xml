@@ -84,12 +84,12 @@
 
             android:paddingBottom="10dp"
             android:src="@drawable/ic_color_lens_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/image_draw_undo"
+            app:layout_constraintEnd_toStartOf="@+id/btnUndo"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/icon_color" />
 
         <ImageButton
-            android:id="@+id/image_draw_undo"
+            android:id="@+id/btnUndo"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:background="@null"
@@ -100,12 +100,12 @@
 
             android:paddingBottom="10dp"
             android:src="@drawable/ic_undo_black_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/image_draw_redo"
+            app:layout_constraintEnd_toStartOf="@+id/btnRedo"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/icon_color" />
 
         <ImageButton
-            android:id="@+id/image_draw_redo"
+            android:id="@+id/btnRedo"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:background="@null"
@@ -131,7 +131,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_draw_eraser" />
 
-        <com.celano.base.ardrawingsketchandpaint.widget.CircleView
+        <com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView
             android:id="@+id/circle_view_preview"
             android:layout_width="56dp"
             android:layout_height="56dp"

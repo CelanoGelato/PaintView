@@ -29,6 +29,10 @@ public class Eraser implements ToolInterface {
         setUp();
     }
 
+    public void setEraserSize (int eraserSize) {
+        this.eraserSize = eraserSize;
+    }
+
     private void setUp() {
         mEraserPaint.setColor(Color.BLACK);
         mEraserPaint.setDither(true);

@@ -16,14 +16,13 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.celano.base.ardrawingsketchandpaint.widget.CircleView;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView;
 import com.celano.base.ardrawingsketchandpaint.widget.DrawView;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
@@ -32,7 +31,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 public class DrawingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener {
     private DrawView draw;
@@ -84,8 +82,8 @@ public class DrawingActivity extends AppCompatActivity implements View.OnClickLi
         saveBtn = findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(this);
 
-        redoBtn = findViewById(R.id.image_draw_redo);
-        undoBtn = findViewById(R.id.image_draw_undo);
+        redoBtn = findViewById(R.id.btnRedo);
+        undoBtn = findViewById(R.id.btnUndo);
 
         redoBtn.setOnClickListener(new View.OnClickListener() {
             @Override

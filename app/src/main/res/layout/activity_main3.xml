@@ -1,82 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity3">
 
-    <RelativeLayout
+    <com.celano.base.ardrawingsketchandpaint.demo.paint.PaintView
+        android:id="@+id/paintView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/pencilEraseParent"
-        android:layout_alignParentTop="true">
+        android:layout_height="match_parent" />
 
-        <com.celano.base.ardrawingsketchandpaint.demo.paint.PaintView
-            android:id="@+id/paintView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:id="@+id/pencilEraseParent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/undoRedoParent"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnPencil"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Pencil" />
-
-        <Button
-            android:id="@+id/btnErasor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="Erasor" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/undoRedoParent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/btnClear"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <Button
-            android:id="@+id/btnUndo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Undo" />
-
-        <Button
-            android:id="@+id/btnRedo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="Redo" />
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/draw_tools"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Clear" />
+        android:layout_centerHorizontal="true"
+        android:background="#353639"
+        android:elevation="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:translationY="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/btnErasor"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_clean"
+            app:layout_constraintEnd_toStartOf="@+id/btnPencil"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <ImageButton
+            android:id="@+id/btnPencil"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_brush_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnSetWidthShape"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+
+        <ImageButton
+            android:id="@+id/btnSetWidthShape"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_adjust_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/image_draw_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <ImageButton
+            android:id="@+id/image_draw_color"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_color_lens_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnUndo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <ImageButton
+            android:id="@+id/btnUndo"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+
+            android:paddingTop="10dp"
+
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_undo_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnRedo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <ImageButton
+            android:id="@+id/btnRedo"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+
+            android:paddingTop="10dp"
+
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_redo_black_24dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnClear"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <ImageButton
+            android:id="@+id/btnClear"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:background="@null"
+            android:foreground="?selectableItemBackground"
+            android:onClick="onClick"
+
+            android:paddingTop="10dp"
+
+            android:paddingBottom="10dp"
+            android:src="@drawable/clear"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_color" />
+
+        <SeekBar
+            android:id="@+id/seekBar_width"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:progress="8"
+            app:layout_constraintEnd_toStartOf="@+id/circle_view_preview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnErasor" />
+
+        <com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView
+            android:id="@+id/circle_view_preview"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnErasor" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/pencilEraseParent"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_above="@+id/undoRedoParent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:weightSum="2">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnPencil"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Pencil" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnErasor"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginLeft="20dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Erasor" />-->
+
+    <!--    </LinearLayout>-->
+    <!---->
+    <!---->
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/undoRedoParent"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_above="@+id/btnClear"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:weightSum="2">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnUndo"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Undo" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnRedo"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginLeft="20dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:text="Redo" />-->
+
+    <!--    </LinearLayout>-->
+    <!---->
+    <!---->
+    <!--    <Button-->
+    <!--        android:id="@+id/btnClear"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:text="Clear" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

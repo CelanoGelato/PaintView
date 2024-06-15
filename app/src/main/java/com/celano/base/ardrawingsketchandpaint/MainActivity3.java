@@ -4,20 +4,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.celano.base.ardrawingsketchandpaint.R;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.PaintConstants;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.PaintView;
 import com.celano.base.ardrawingsketchandpaint.demo.paint.interfaces.PaintViewCallBack;
+import com.celano.base.ardrawingsketchandpaint.demo.paint.view.CircleView;
 
 public class MainActivity3 extends AppCompatActivity {
 
 
     private PaintView mPaintView;
-    private Button btnPencil, btnErasor, btnUndo, btnRedo, btnClear;
+    private ImageButton btnPencil, btnErasor, btnUndo, btnRedo, btnClear, btnSetWidthShape;
+
+    private View toolbar;
+    private boolean toolbarOpen;
+
+    private CircleView preview;
+    private SeekBar seekBarWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +32,18 @@ public class MainActivity3 extends AppCompatActivity {
         setContentView(R.layout.activity_main3);
 
         mPaintView = (PaintView) findViewById(R.id.paintView);
-//        mPaintView.setBackgroundResource(R.drawable.z);
 
-        btnPencil = (Button) findViewById(R.id.btnPencil);
-        btnErasor = (Button) findViewById(R.id.btnErasor);
-        btnUndo = (Button) findViewById(R.id.btnUndo);
-        btnRedo = (Button) findViewById(R.id.btnRedo);
-        btnClear = (Button) findViewById(R.id.btnClear);
+        btnPencil = (ImageButton) findViewById(R.id.btnPencil);
+        btnErasor = (ImageButton) findViewById(R.id.btnErasor);
+        btnUndo = (ImageButton) findViewById(R.id.btnUndo);
+        btnRedo = (ImageButton) findViewById(R.id.btnRedo);
+        btnClear = (ImageButton) findViewById(R.id.btnClear);
+        btnSetWidthShape = (ImageButton) findViewById(R.id.btnSetWidthShape);
+        preview = findViewById(R.id.circle_view_preview);
+        seekBarWidth = findViewById(R.id.seekBar_width);
+
+        toolbar = findViewById(R.id.draw_tools);
+        toolbarOpen = false;
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.raw.image);
         mPaintView.setBackgroundImage(bitmap);
@@ -66,8 +78,37 @@ public class MainActivity3 extends AppCompatActivity {
                 mPaintView.clearAll(false);
             }
         });
+        btnSetWidthShape.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleToolbar();
+            }
+        });
+
+        seekBarWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mPaintView.setPenSize(progress);
+                preview.setCircleRadius((float) progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         initCallBack();
+    }
+
+    private void toggleToolbar() {
+        toolbar.animate().translationY((toolbarOpen ? 56 : 0) * getResources().getDisplayMetrics().density);
+        toolbarOpen = !toolbarOpen;
     }
 
     private void onClickButtonPencil() {
